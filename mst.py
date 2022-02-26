@@ -41,7 +41,7 @@ class MSTSynthesizer():
                  num_marginals=None,
                  max_cells=10000
                 ):
-        domain_name = self.ACS_Domains[domain]
+        domain_name = self.Domains[domain]
         with open(domain_name) as json_file:
             dict_domain = json.load(json_file)
         if dict_domain is None:
