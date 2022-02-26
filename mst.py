@@ -39,11 +39,18 @@ class MSTSynthesizer():
                  delta=1e-9,
                  degree=2,
                  num_marginals=None,
-                 max_cells=10000
+                 max_cells=10000,
+                 domain_path=None
                 ):
-        domain_name = self.Domains[domain]
-        with open(domain_name) as json_file:
-            dict_domain = json.load(json_file)
+        
+        if domain_path is None:
+            domain_name = self.Domains[domain]
+            with open(domain_name) as json_file:
+                dict_domain = json.load(json_file)
+        else:
+            with open(domain_path) as json_file:
+                dict_domain = json.load(json_file)
+                
         if dict_domain is None:
             raise ValueError("Domain file not found for: " + domain + " and " + domain_name)
         self.domain = Domain.fromdict(dict_domain)
