@@ -29,7 +29,7 @@ class MSTSynthesizer():
     """
 
     Domains = {
-        "fake": "fake-domain.json"
+        "fake": "fake-domain.json",
         "compas": "compas-domain.json"
     }
     
