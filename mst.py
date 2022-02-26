@@ -1,7 +1,7 @@
 # TODO: Add fit and sample methods
 
 import numpy as np
-from pribate-pgm.mbi import FactoredInference, Dataset, Domain
+from mbi import FactoredInference, Dataset, Domain
 from scipy import sparse
 from disjoint_set import DisjointSet
 import networkx as nx
