@@ -151,25 +151,25 @@ class MSTSynthesizer():
             x = data.project([a, b]).datavector()
             weights[a,b] = np.linalg.norm(x - xhat, 1)
 
-        T = nx.Graph()
-        T.add_nodes_from(data.domain.attrs)
+        self.T = nx.Graph()
+        self.T.add_nodes_from(data.domain.attrs)
         ds = DisjointSet()
 
         for e in cliques:
-            T.add_edge(*e)
+            self.T.add_edge(*e)
             ds.union(*e)
 
-        r = len(list(nx.connected_components(T)))
+        r = len(list(nx.connected_components(self.T)))
         epsilon = np.sqrt(8*rho/(r-1))
         for i in range(r-1):
             candidates = [e for e in candidates if not ds.connected(*e)]
             wgts = np.array([weights[e] for e in candidates])
             idx = self.exponential_mechanism(wgts, epsilon, sensitivity=1.0)
             e = candidates[idx]
-            T.add_edge(*e)
+            self.T.add_edge(*e)
             ds.union(*e)
 
-        return list(T.edges)
+        return list(self.T.edges)
 
     def transform_data(self, data, supports):
         df = data.df.copy()
@@ -208,6 +208,9 @@ class MSTSynthesizer():
             df.loc[~mask, col] = idx[df.loc[~mask, col]]
         newdom = Domain.fromdict(newdom)
         return Dataset(df, newdom)
+
+    def display_MST_graph(self):
+        nx.draw(self.T, with_labels = True)
 
 # TODO: Get rid of this. Here now for convenience.
 
