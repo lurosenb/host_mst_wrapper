@@ -39,7 +39,10 @@ class MSTSynthesizer():
                  degree=2,
                  num_marginals=None,
                  max_cells=10000,
-                 domain_path=None
+                 domain_path=None,
+                 seed=42,
+                 custom_cliques=False,
+                 cliques_set=[]
                 ):
         
         if domain_path is None:
@@ -58,22 +61,28 @@ class MSTSynthesizer():
         self.delta = delta
         self.num_marginals = num_marginals
         self.max_cells = max_cells
+        self.seed = seed
 
         self.synthesizer = None
         self.num_rows = None
+
+        # For Homework: allow custom clique sets
+        self.custom_cliques = custom_cliques
+        self.cliques_set = cliques_set
 
     def fit(self, data, categorical_columns=tuple(), ordinal_columns=tuple()):
         self.num_rows = len(data)
         print(self.domain)
         print(data.columns)
-        data = Dataset(df=data, domain=self.domain)
+        prng = np.random.RandomState(self.seed)
+        self.data = Dataset(df=data, domain=self.domain)
 
-        workload = list(itertools.combinations(data.domain, self.degree))
-        workload = [cl for cl in workload if data.domain.size(cl) <= self.max_cells]
+        workload = list(itertools.combinations(self.data.domain, self.degree))
+        workload = [cl for cl in workload if self.data.domain.size(cl) <= self.max_cells]
         if self.num_marginals is not None:
             workload = [workload[i] for i in prng.choice(len(workload), self.num_marginals, replace=False)]
 
-        self.MST(data, self.epsilon, self.delta)
+        self.MST(self.data, self.epsilon, self.delta)
     
     def sample(self, samples=None):
         if samples is None:
@@ -92,7 +101,11 @@ class MSTSynthesizer():
         # Here's the decompress function
         self.undo_compress_fn = undo_compress_fn
 
-        cliques = self.select(data, rho/3.0, log1)
+        if self.custom_cliques:
+            cliques = self.cliques_set
+        else:
+            cliques = self.select(data, rho/3.0, log1)
+        print(cliques)
         log2 = self.measure(data, cliques, sigma)
         engine = FactoredInference(data.domain, iters=5000)
         est = engine.estimate(log1+log2)
