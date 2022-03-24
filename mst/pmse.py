@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 
-def pmse_ratio(data, synthetic_data):
+def pmse_ratio(data, synthetic_data, seed=42):
     """
     In order to determine how similar the synthetic and real data are
     to each other (general quality of synthetic) we can train a 
@@ -26,7 +26,7 @@ def pmse_ratio(data, synthetic_data):
     comb = pd.concat([data, synthetic_data], axis=0, keys=[0, 1]).reset_index(level=[0]).rename(columns={'level_0': 'indicator'})
     X_comb = comb.drop('indicator', axis=1)
     y_comb = comb['indicator']
-    X_train, X_test, y_train, y_test = train_test_split(X_comb, y_comb, test_size=0.33, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X_comb, y_comb, test_size=0.33, random_state=seed)
     clf = LogisticRegression(random_state=0).fit(X_train, y_train)
     score = clf.predict_proba(X_comb)[:, 1]
     observed_utility = sum((score - n2/(n1+n2))**2) / (n1+n2)
