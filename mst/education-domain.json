@@ -1,0 +1,17 @@
+{
+    "CategoricalGrades" : 11,
+    "CompositeGrades" : 33,
+    "FathersWishes" : 9,
+    "GradesUndergrad" : 2,
+    "HighSchoolHelpedWithSchoolApplication" : 5,
+    "ParentsCheckHomework" : 7,
+    "ParentsHighestLevelEducation" : 9,
+    "PrivateSchoolExpenses" : 5,
+    "Race" : 2,
+    "Sex" : 2,
+    "SocioEconomicStatusQuartile" : 6,
+    "StandardizedTestQuartile" : 7,
+    "TimeSpentOnExtracurriculars" : 8,
+    "TimeSpentOnHomeworkInSchool" : 11,
+    "Tutored" : 4
+}
